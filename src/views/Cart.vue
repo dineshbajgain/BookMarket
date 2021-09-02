@@ -20,10 +20,12 @@
                 <img alt="ecommerce" class="object-cover object-center w-40 h-40 block" :src="product.image">
               </td>
               <td class="px-4 py-3">{{product ["name "]}}</td>
-              <td class="px-4 py-3">{{product.quantity}}</td>
+              <td class="px-4 py-3">
+                <input type="number" @input="updateCart(product)" v-model="product.quantity" class="block appearance-none w-1/6 bg-gray-200 border border-gray-200 text-gray-700">
+              </td>
               <td class="px-4 py-3 text-lg text-gray-900">RS. {{(product.quantity * product.price).toFixed(2)}}</td>
             </tr>
-            <tr class="border px-2">
+            <tr class="border px-4">
               <td class="px-4 py-3"></td>
               <td class="px-4 py-3 text-lg text-gray-900">Total</td>
               <td class="px-4 py-3 text-lg text-gray-900">{{cartCount}}</td>
@@ -33,7 +35,7 @@
           </table>
         </div>
         <div class="flex pl-4 mt-4 lg:w-2/3   w-full mx-auto">
-          <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Checkout</button>
+          <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" @click="updateCart">Update</button>
         </div>
       </div>
     </section>
@@ -45,17 +47,11 @@ export default {
   components: {
   },
   data(){
-    return{
-     cartData: this.$store.getters["cart/getCartData"]
+    return {
+      cartData:this.$store.getters["cart/getCartData"]
     }
   },
   computed: {
-    filteredData () {
-      return this.$store.getters["products/productData"]
-    },
-    genres(){
-      return this.$store.getters["products/genres"]
-    },
     cartCount(){
       return this.$store.getters["cart/getTotalCartCount"]
     },
@@ -63,22 +59,17 @@ export default {
       return this.$store.getters["cart/getCartTotalAmount"]
     }
   },
-  created() {
-    this.getApiData()
-  },
-  watch:{
-    "filteredData"(val){
-      if(val){
-        this.productData =this.filteredData
-      }
-    }
-  },
-  methods: {
-    addToCart(cartItem){
-      this.$store.dispatch("cart/addToCart",cartItem)
-    },
-    async getApiData() {
 
+  methods: {
+    async updateCart(cartItem){
+      if(cartItem.stock < cartItem.quantity) {
+        cartItem.quantity = cartItem.stock
+        this.$notify({type: "error", text:"Cant be added more than stock."});
+      }else{
+        await this.$store.dispatch("cart/updateCart",cartItem)
+        this.$notify({type: "success", text:"Item Updated to cart"});
+
+      }
     }
   }
 }

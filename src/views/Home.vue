@@ -25,7 +25,7 @@
             <p>
               {{ $moment(product.published_date).format("DD-MM-YYYY") }}
             </p>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50" @click="addToCart(product)" :disabled="product.stock===0?true:false">Add To Cart</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50" @click="addToCart(product)" :disabled="product.stock_data===0?true:false">Add To Cart</button>
           </div>
         </div>
       </div>
@@ -60,16 +60,22 @@ export default {
     this.getApiData()
   },
   watch:{
-    "filteredData"(val){
-      if(val){
-        this.productData =this.filteredData
-      }
+    "filteredData":{
+      handler: function (val){
+        if(val){
+          this.productData =this.filteredData
+        }
+      },
+      immediate:true
     }
   },
   methods: {
     async addToCart(cartItem){
-      await this.$store.dispatch("cart/addToCart",cartItem)
-      this.$notify({type: "success", text:"Item Added to cart"});
+      if(await this.$store.dispatch("cart/addToCart",cartItem)){
+        this.$notify({type: "error", text:"Cant be added more than 5 books at a time"});
+      }else{
+        this.$notify({type: "success", text:"Item Added to cart"});
+      }
     },
     getFilterData() {
       this.productData = this.filteredData.filter(response => {
@@ -81,7 +87,9 @@ export default {
     },
     async getApiData() {
       this.$notify({type: "success", text:"Welcome To Book Market"});
-      await this.$store.dispatch("products/productData")
+      if(this.$store.getters["products/productData"].length === 0){
+        await this.$store.dispatch("products/productData")
+      }
     }
   }
 }

@@ -42,7 +42,7 @@ const actions = {
         stockDecrement({state,commit},product){
             let data = state.productData.map(res=>{
                 if(product.id===res.id){
-                    res.stock=product.stock
+                    res.stock_data=product.stock_data
                 }
                 return res
             })

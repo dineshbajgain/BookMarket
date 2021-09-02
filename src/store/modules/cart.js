@@ -38,20 +38,27 @@ const mutations = {
 const actions = {
     addToCart({commit,state,dispatch},cartItem,quantity=1) {
         if(!state.cartData.find(res=>res.id===cartItem.id)){
+            if(state.cartData.length >= 5){
+                return true
+            }
             cartItem.quantity = quantity
-            cartItem.stock -= quantity
+            cartItem.stock_data = cartItem.stock - cartItem.quantity
             commit('setCartData', cartItem)
-            dispatch('products/stockDecrement',quantity,{root:true})
+            dispatch('products/stockDecrement',cartItem,{root:true})
         }else{
             state.cartData.map(res=>{
                 if(res.id===cartItem.id) {
-                    res.stock -= quantity
                     res.quantity += quantity
+                    res.stock_data = res.stock - res.quantity
                 }
             })
+            console.log(cartItem)
             commit('updateCartData', state.cartData)
             dispatch('products/stockDecrement',cartItem,{root:true})
         }
+        dispatch('calcualteCart')
+         },
+    calcualteCart({state,commit}){
         let totalQuantity =0
         let totalAmount = 0
         state.cartData.forEach(response=>{
@@ -60,6 +67,22 @@ const actions = {
         })
         commit('setCartCount',totalQuantity)
         commit('setCartAmount',totalAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
+    },
+    updateCart({state,commit,dispatch},cartItem){
+        if(cartItem.stock < cartItem.quantity){
+           return true
+        }else{
+            state.cartData.map(res=>{
+                if(res.id===cartItem.id) {
+                    res.stock_data = res.stock - cartItem.quantity
+                    res.quantity = cartItem.quantity
+                }
+            })
+            commit('updateCartData', state.cartData)
+            dispatch('products/stockDecrement',cartItem,{root:true})
+            dispatch('calcualteCart')
+        }
+
     }
 }
 
@@ -70,3 +93,6 @@ export default {
     actions,
     mutations
 }
+
+
+
