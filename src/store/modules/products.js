@@ -36,7 +36,7 @@ const actions = {
             })
             localStorage.setItem('products', JSON.stringify(response.data))
             commit('setProducts',response.data)
-            commit('setGenres',genres)
+            commit('setGenres',[...new Set(genres.map(item => item.genre))])
         })
         },
         stockDecrement({state,commit},product){
@@ -46,7 +46,6 @@ const actions = {
                 }
                 return res
             })
-            // console.log(data)
             commit('setProducts',data)
         }
     }
