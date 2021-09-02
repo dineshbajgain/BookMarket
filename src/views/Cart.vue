@@ -5,7 +5,7 @@
           <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Cart</h1>
         </div>
         <div class="lg:w-2/3 w-full mx-auto overflow-auto">
-          <table class="table-auto w-full text-left whitespace-no-wrap">
+          <table class="table-auto w-full text-left whitespace-no-wrap border">
             <thead>
             <tr>
               <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Product</th>
@@ -16,26 +16,26 @@
             </thead>
             <tbody>
             <tr v-for="product in cartData" :key="product.id">
-              <td class="px-4 py-3">
+              <td class="border px-4 py-3">
                 <img alt="ecommerce" class="object-cover object-center w-40 h-40 block" :src="product.image">
               </td>
-              <td class="px-4 py-3">{{product ["name "]}}</td>
-              <td class="px-4 py-3">
-                <input type="number" @input="updateCart(product)" v-model="product.quantity" class="block appearance-none w-1/6 bg-gray-200 border border-gray-200 text-gray-700">
-              </td>
-              <td class="px-4 py-3 text-lg text-gray-900">RS. {{(product.quantity * product.price).toFixed(2)}}</td>
+              <td class="border px-4 py-3">{{product ["name "]}}</td>
+              <td class="border px-4 py-3">
+                <input type="number" @input="updateCart(product)" v-model="product.quantity" class="shadow appearance-none border rounded w-16 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+                </td>
+              <td class="border px-4 py-3 text-lg text-gray-900">RS. {{(product.quantity * product.price).toFixed(2)}}</td>
             </tr>
-            <tr class="border px-4">
-              <td class="px-4 py-3"></td>
-              <td class="px-4 py-3 text-lg text-gray-900">Total</td>
-              <td class="px-4 py-3 text-lg text-gray-900">{{cartCount}}</td>
-              <td class="px-4 py-3 text-lg text-gray-900">RS. {{getCartTotalAmount}}</td>
+            <tr >
+              <td class=" border px-4 py-3"></td>
+              <td class=" border px-4 py-3 text-lg text-gray-900">Total</td>
+              <td class=" border px-4 py-3 text-lg text-gray-900">{{cartCount}}</td>
+              <td class=" border px-4 py-3 text-lg text-gray-900">RS. {{getCartTotalAmount}}</td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="flex pl-4 mt-4 lg:w-2/3   w-full mx-auto">
-          <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" @click="updateCart">Update</button>
+          <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Continue</button>
         </div>
       </div>
     </section>

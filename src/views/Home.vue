@@ -26,7 +26,7 @@
             <p>
               {{ $moment(product.published_date).format("DD-MM-YYYY") }}
             </p>
-            <button class="border border-indigo-600 w-full hover:bg-blue-700 hover:text-white font-bold py-2 px-4 rounded disabled:opacity-50" @click="addToCart(product)" :disabled="product.stock_data===0?true:false">Add To Cart</button>
+            <button class="border border-indigo-600 w-full hover:bg-blue-700 hover:text-white font-bold py-2 px-4 rounded disabled:opacity-50" @click="addToCart(product)" :disabled="product.stock_data===0?true:false" v-text="product.stock_data===0?'Out of Stock':'Add To Cart'"></button>
           </div>
         </div>
       </div>
