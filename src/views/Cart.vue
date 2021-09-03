@@ -21,7 +21,7 @@
               </td>
               <td class="border px-4 py-3">{{product ["name "]}}</td>
               <td class="border px-4 py-3">
-                <input type="number" @input="updateCart(product)" v-model="product.quantity" class="shadow appearance-none border rounded w-16 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+                <input min="1" type="number" @input="updateCart(product)" v-model="product.quantity" class="shadow appearance-none border rounded w-16 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
                 </td>
               <td class="border px-4 py-3 text-lg text-gray-900">RS. {{(product.quantity * product.price).toFixed(2)}}</td>
             </tr>
@@ -64,7 +64,7 @@ export default {
     async updateCart(cartItem){
       if(cartItem.stock < cartItem.quantity) {
         cartItem.quantity = cartItem.stock
-        this.$notify({type: "error", text:"Cant be added more than stock."});
+        this.$notify({type: "error", text:"Out of stock."});
       }else{
         await this.$store.dispatch("cart/updateCart",cartItem)
         this.$notify({type: "success", text:"Item Updated to cart"});

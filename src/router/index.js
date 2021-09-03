@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-
+import store from '../store'
 const routes = [
   {
     path: '/',
@@ -21,5 +21,8 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Home' && store.getters["cart/getTotalCartCount"] === 0) next({ name: 'Home' })
+  else next()
+})
 export default router
